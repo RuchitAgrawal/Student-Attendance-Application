@@ -14,13 +14,23 @@ def calculate_attendance(attended, total):
     return (attended / total) * 100
 
 
-def print_summary():
-    print("Student Attendance Summary")
-    print("-" * 40)
+def generate_report(filepath="attendance_report.txt"):
+    lines = []
+    lines.append("Student Attendance Report")
+    lines.append("=" * 40)
     for sid, data in students.items():
         pct = calculate_attendance(data["attended"], data["total"])
         status = "OK" if pct >= 75 else "LOW"
-        print(f"{sid} | {data['name']:10s} | {pct:.1f}% | {status}")
+        lines.append(f"{sid} | {data['name']:10s} | {pct:.1f}% | {status}")
+    report = "\n".join(lines)
+    with open(filepath, "w") as f:
+        f.write(report)
+    return report
+
+
+def print_summary():
+    report = generate_report()
+    print(report)
 
 
 if __name__ == "__main__":
